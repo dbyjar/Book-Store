@@ -21,14 +21,60 @@ module.exports = {
           }
         }, APP_KEY);
 
-        if (checkPassword)
-          res.status(200).json({ message: 'Success', data: { token: token } });
-        else
-          res.status(403).json({ message: 'Invalid Password' });
+        if (checkPassword) {
+          res
+            .status(200)
+            .json({
+              message: 'success signin',
+              data: { token }
+            });
+        } else {
+          res
+            .status(403)
+            .json({ message: 'invalid password' });
+        }
 
       } else {
-        res.status(403).json({ message: 'Error, user not found' });
+        res
+          .status(403)
+          .json({ message: 'error, user not found' });
       }
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  signup: async (req, res, next) => {
+    try {
+      const { name, email, password, confirmPassword } = req.body;
+
+      if (password !== confirmPassword) {
+        res.status(403).json({
+          message: "password and confirmPassword doesn't match"
+        })
+      }
+
+      const checkEmail = await User.findOne({ where: { email: email } });
+
+      if (checkEmail) {
+        return res.status(403).json({
+          message: 'email registered'
+        })
+      }
+
+      const user = await User.create({
+        name,
+        email,
+        password: bcrypt.hashSync(password, 10),
+        role: 'admin'
+      });
+
+      delete user.dataValues.password;
+
+      res.status(201).json({
+        message: 'success signup',
+        data: user
+      });
     } catch (error) {
       next(error);
     }
