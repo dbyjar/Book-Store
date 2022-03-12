@@ -7,6 +7,7 @@ const baseURL = '/api';
 const authRouter = require('./app/api/auth/router');
 const categoriesRouter = require('./app/api/categories/router');
 const booksRouter = require('./app/api/books/router');
+const uploadsRouter = require('./app/api/uploads/router');
 
 const app = express();
 
@@ -23,5 +24,6 @@ app.get('/', (req, res) => {
 app.use(`${baseURL}`, authRouter);
 app.use(`${baseURL}`, categoriesRouter);
 app.use(`${baseURL}`, booksRouter);
+app.use(`${baseURL}`, uploadsRouter);
 
 module.exports = app;

@@ -35,17 +35,26 @@ module.exports = {
 
   store: async (req, res, next) => {
     try {
-      const { name } = req.body;
+      const user = req.user.id;
+      const { title, category, author, image, price, stock, published } = req.body;
+
+      const checkCategory = await Category.findOne({
+        where: { id: category, user }
+      });
+
+      if (!checkCategory) {
+        return res.status(404).json({ message: 'category not found' });
+      }
 
       const data = await Book.create({
-        name,
-        user: req.user.id
+        title, category, author, image, price, stock, published, user
       });
 
       res.status(201).json({
         message: 'sucess create book',
         data
-      })
+      });
+
     } catch (error) {
       next(error);
     }

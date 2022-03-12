@@ -4,7 +4,7 @@ const { auth } = require('../../middlewares/auth');
 const controller = require('./controller');
 
 router.get('/books', auth, controller.fetchs);
-router.post('/books/store', auth, controller.store);
+router.post('/books', auth, controller.store);
 router.post('/books/:id', auth, controller.update);
 router.delete('/books/:id', auth, controller.destroy);
 
