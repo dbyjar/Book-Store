@@ -62,19 +62,27 @@ module.exports = {
 
   update: async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const { name } = req.body;
-      const checkBook = await Book.findOne({
-        where: {
-          id,
-          user: req.user.id
-        }
+      const id = req.params.id
+      const user = req.user.id;
+
+      const { title, category, author, image, price, stock, published } = req.body;
+
+      const checkCategory = await Category.findOne({ where: { id: category, user } });
+      if (!checkCategory) {
+        return res.status(404).json({ message: 'category not found' });
+      }
+
+      const checkBook = await Book.findOne({ where: { id, user } })
+      if (!checkBook) {
+        return res.status(404).json({ message: 'book not found' });
+      }
+
+      const data = await checkBook.update({
+        title, category, author, image, price, stock, published, user
       });
 
-      const data = await checkBook.update({ name });
-
       res.status(201).json({
-        messsage: 'success update Book',
+        message: 'sucess update book',
         data
       });
     } catch (error) {
