@@ -1,10 +1,28 @@
-const { Book } = require('../../db/models');
+const { Book, Category } = require('../../db/models');
+const { Op } = require('sequelize');
 
 module.exports = {
   fetchs: async (req, res, next) => {
     try {
       const user = req.user;
-      const data = await Book.findAll({ where: { user: user.id }, });
+      const { search = '' } = req.query;
+
+      let condition = { user: user.id };
+
+      if (search !== '') {
+        condition = {
+          ...condition,
+          title: { [Op.like]: `%${search}%` }
+        }
+      }
+
+      const data = await Book.findAll({
+        where: condition,
+        include: {
+          model: Category,
+          attributes: ['id', 'name']
+        }
+      });
 
       res.status(200).json({
         message: 'sucess get all data books',

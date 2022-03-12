@@ -3,7 +3,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-const baseURL = '/api/v1';
+const baseURL = '/api';
 const authRouter = require('./app/api/auth/router');
 const categoriesRouter = require('./app/api/categories/router');
 const booksRouter = require('./app/api/books/router');
