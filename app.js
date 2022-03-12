@@ -6,6 +6,7 @@ const logger = require('morgan');
 const baseURL = '/api/v1';
 const authRouter = require('./app/api/auth/router');
 const categoriesRouter = require('./app/api/categories/router');
+const booksRouter = require('./app/api/books/router');
 
 const app = express();
 
@@ -16,10 +17,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
-  res.json({ message: 'Hi' })
+  res.json({ message: 'Welcome to Book Store API (Express JS)' })
 });
 
 app.use(`${baseURL}`, authRouter);
 app.use(`${baseURL}`, categoriesRouter);
+app.use(`${baseURL}`, booksRouter);
 
 module.exports = app;

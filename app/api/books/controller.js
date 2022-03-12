@@ -1,16 +1,13 @@
-const { Category } = require('../../db/models');
+const { Book } = require('../../db/models');
 
 module.exports = {
   fetchs: async (req, res, next) => {
     try {
       const user = req.user;
-      const data = await Category.findAll({
-        where: { user: user.id },
-        attributes: ['id', 'name']
-      });
+      const data = await Book.findAll({ where: { user: user.id }, });
 
       res.status(200).json({
-        message: 'sucess get all data categories',
+        message: 'sucess get all data books',
         data
       });
     } catch (error) {
@@ -22,13 +19,13 @@ module.exports = {
     try {
       const { name } = req.body;
 
-      const data = await Category.create({
+      const data = await Book.create({
         name,
         user: req.user.id
       });
 
       res.status(201).json({
-        message: 'sucess create category',
+        message: 'sucess create book',
         data
       })
     } catch (error) {
@@ -40,17 +37,17 @@ module.exports = {
     try {
       const { id } = req.params;
       const { name } = req.body;
-      const checkCategory = await Category.findOne({
+      const checkBook = await Book.findOne({
         where: {
           id,
           user: req.user.id
         }
       });
 
-      const data = await checkCategory.update({ name });
+      const data = await checkBook.update({ name });
 
       res.status(201).json({
-        messsage: 'success update category',
+        messsage: 'success update Book',
         data
       });
     } catch (error) {
@@ -59,7 +56,7 @@ module.exports = {
   },
 
   destroy: (req, res, next) => {
-    Category.findOne({
+    Book.findOne({
       where: { id: req.params.id, user: req.user.id }
     })
       .then((data) => {
@@ -67,7 +64,7 @@ module.exports = {
           data.destroy();
 
           res.status(200).json({
-            message: 'success delete category',
+            message: 'success delete Book',
             data
           })
         }
